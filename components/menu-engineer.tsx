@@ -82,8 +82,20 @@ export function MenuEngineer() {
             </div>
             <KpiCards analysis={analysis} />
             {loading ? <AiSkeleton /> : <AiInsights result={aiResult} error={aiError} cidade={submitted?.cidade ?? ""} />}
-            <BcgMatrix analysis={analysis} />
-            <MenuTable analysis={analysis} />
+            {loading ? (
+              <AiSkeleton />
+            ) : aiResult?.pricing.length ? (
+              <>
+                <BcgMatrix pricing={aiResult.pricing} />
+                <MenuTable pricing={aiResult.pricing} />
+              </>
+            ) : (
+              !aiError && (
+                <p className="rounded-xl border border-dashed bg-card p-6 text-center text-sm text-muted-foreground">
+                  A IA não retornou a classificação BCG dos pratos.
+                </p>
+              )
+            )}
             {analysis.errors.length > 0 && (
               <ul className="text-xs text-muted-foreground">
                 {analysis.errors.map((e) => (

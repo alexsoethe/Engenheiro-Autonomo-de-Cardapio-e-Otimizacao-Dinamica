@@ -1,4 +1,4 @@
-export type BcgCategory = "estrela" | "vaca" | "interrogacao" | "abacaxi"
+export type BcgCategory = "estrela" | "cavalo" | "quebra" | "cao"
 
 export type MenuItem = {
   prato: string
@@ -8,7 +8,6 @@ export type MenuItem = {
   margem: number
   margemPct: number
   lucroTotal: number
-  categoria: BcgCategory
 }
 
 export type MenuAnalysis = {
@@ -29,18 +28,18 @@ export const BCG_META: Record<
     description: "Alta popularidade e alta margem",
     action: "Manter destaque e proteger o preço",
   },
-  vaca: {
-    label: "Vaca Leiteira",
+  cavalo: {
+    label: "Cavalo de Arado",
     description: "Alta popularidade, margem baixa",
     action: "Reajustar preço ou reduzir custo",
   },
-  interrogacao: {
-    label: "Interrogação",
+  quebra: {
+    label: "Quebra-cabeça",
     description: "Margem alta, pouca venda",
     action: "Promover e reposicionar no cardápio",
   },
-  abacaxi: {
-    label: "Abacaxi",
+  cao: {
+    label: "Cão",
     description: "Baixa popularidade e baixa margem",
     action: "Reformular ou retirar do cardápio",
   },
@@ -114,21 +113,11 @@ export function analyzeMenu(csv: string): MenuAnalysis {
 
   const items: MenuItem[] = raw.map((r) => {
     const margem = r.preco - r.custo
-    const popular = r.vendas >= mediaVendas
-    const rentavel = margem >= mediaMargem
-    const categoria: BcgCategory = popular
-      ? rentavel
-        ? "estrela"
-        : "vaca"
-      : rentavel
-        ? "interrogacao"
-        : "abacaxi"
     return {
       ...r,
       margem,
       margemPct: r.preco ? (margem / r.preco) * 100 : 0,
       lucroTotal: margem * r.vendas,
-      categoria,
     }
   })
 

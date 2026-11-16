@@ -1,19 +1,19 @@
 import { cn } from "@/lib/utils"
-import { BCG_META, brl, type BcgCategory, type MenuAnalysis } from "@/lib/menu"
-import { BCG_STYLE } from "@/components/bcg-style"
+import { BCG_META, type BcgCategory } from "@/lib/menu"
+import type { AiPricing } from "@/lib/parse-ai"
+import { BCG_STYLE, categoryFromText } from "@/components/bcg-style"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-const ORDER: BcgCategory[] = ["interrogacao", "estrela", "abacaxi", "vaca"]
+const ORDER: BcgCategory[] = ["quebra", "estrela", "cao", "cavalo"]
 
-export function BcgMatrix({ analysis }: { analysis: MenuAnalysis }) {
+export function BcgMatrix({ pricing }: { pricing: AiPricing[] }) {
+  const unclassified = pricing.filter((p) => !categoryFromText(p.categoria))
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-base">Matriz BCG do cardápio</CardTitle>
-        <CardDescription>
-          Corte de popularidade: {Math.round(analysis.mediaVendas).toLocaleString("pt-BR")} vendas/mês · Corte de
-          margem: {brl(analysis.mediaMargem)} por prato
-        </CardDescription>
+        <CardDescription>Classificação de cada prato conforme retornada pela IA.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex gap-3">
@@ -25,7 +25,7 @@ export function BcgMatrix({ analysis }: { analysis: MenuAnalysis }) {
           <div className="flex-1">
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {ORDER.map((cat) => {
-                const items = analysis.items.filter((i) => i.categoria === cat)
+                const items = pricing.filter((p) => categoryFromText(p.categoria) === cat)
                 const style = BCG_STYLE[cat]
                 const Icon = style.icon
                 return (
@@ -38,7 +38,7 @@ export function BcgMatrix({ analysis }: { analysis: MenuAnalysis }) {
                         </p>
                         <p className="mt-0.5 text-xs text-muted-foreground">{BCG_META[cat].description}</p>
                       </div>
-                      <span className="rounded-md bg-background/80 px-1.5 py-0.5 text-xs font-semibold tabular-nums">
+                      <span className="rounded-md bg-background/80 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-foreground">
                         {items.length}
                       </span>
                     </div>
@@ -49,7 +49,7 @@ export function BcgMatrix({ analysis }: { analysis: MenuAnalysis }) {
                         items.map((i) => (
                           <li
                             key={i.prato}
-                            className="rounded-md border bg-background px-2 py-1 text-xs font-medium shadow-xs"
+                            className="rounded-md border bg-background px-2 py-1 text-xs font-medium text-foreground shadow-xs"
                           >
                             {i.prato}
                           </li>
@@ -64,6 +64,12 @@ export function BcgMatrix({ analysis }: { analysis: MenuAnalysis }) {
             <p className="mt-3 text-center text-xs font-medium tracking-wide text-muted-foreground uppercase" aria-hidden="true">
               Popularidade (vendas) →
             </p>
+            {unclassified.length > 0 && (
+              <p className="mt-3 text-xs text-muted-foreground">
+                Sem categoria reconhecida:{" "}
+                {unclassified.map((p) => `${p.prato}${p.categoria ? ` (${p.categoria})` : ""}`).join(", ")}
+              </p>
+            )}
           </div>
         </div>
       </CardContent>

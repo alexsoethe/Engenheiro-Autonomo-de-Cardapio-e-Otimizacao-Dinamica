@@ -12,7 +12,7 @@ export function AiInsights({ result, error, cidade }: { result: AiResult | null;
         <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
         <div>
           <p className="font-medium">Não foi possível obter a análise da IA</p>
-          <p className="mt-1 text-amber-800">{error} A Matriz BCG abaixo foi calculada localmente com seus dados.</p>
+          <p className="mt-1 text-amber-800">{error} Tente novamente para gerar a Matriz BCG.</p>
         </div>
       </div>
     )
