@@ -2,7 +2,7 @@
 
 Aplicação *end-to-end* de Engenharia de Cardápio impulsionada por Inteligência Artificial Generativa, dados climáticos em tempo real e análise financeira automatizada para operações de delivery e restaurantes.
 
-🔗 **Aplicação em Produção (Live Demo):** `https://engenheiro-autonomo-de-cardapio-e-o.vercel.app`
+🔗 **Aplicação em Produção (Live Demo):** https://engenheiro-autonomo-de-cardapio-e-o.vercel.app
 
 ---
 
